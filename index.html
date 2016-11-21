@@ -120,7 +120,11 @@
 	<br><br>  
 	<hr class="featurette-divider">
 	<h2> Progress </h2>
-	<p> FILL THIS IN!!!</p>
+	<p>Currently, we have tested 2 methods for determining which speaker is speaking in each disjoint 10 ms interval of time, given a speech segment.
+	<br><br>
+	The first method tested utilizes Mahalanobis distance and MFCCs (described in New Tools Learned). First, a database of MFCCs for each speaker present in the speech segment must be recorded. This database must be diverse, with each speaker saying a variety of words and sounds. Then, the covariance matrix of the databases is calculated. From this, given an MFCC vector in a 10ms interval of speech, the Mahalanobis distance between this MFCC vector and each database can be calculated and compared. The speaker who has the smallest Mahalanobis distance is most likely speaking in this 10 ms interval. This method has been largely unsucessful thus far, and we are investigating using fewer MFCCs. Specifically, we want to determine which MFCCs have the largest variance among the database speakers, and then use a low-rank approximation to the covariance matrix of each database using only these MFCCs.
+	<br><br>
+	Another method we tested is very similar to the first method; however instead of comparing Mahalanobis distance, we employ a k-th nearest neighbor methodology. Given an MFCC vector for a 10 ms time interval, we find the k-th nearest MFCC vectors in a super database which is the union of the databases for each speaker. Then, whichever speaker has the majority of the k-th nearest vectors is likely the person talking in this 10 ms interval. Again, we have had little success with this method. A similar refinement of the MFCCs as described above can be used here. We also have to check on our MFCC calculations. We have compared them with other published pieces of code online and found differences. </p>
 	</div>
 
 	<!-- NEW TOOLS -->
@@ -129,8 +133,22 @@
 	<div class="clearfix"></div>
 	<br><br>  
 	<hr class="featurette-divider">
-	<h2> New Tool Learned </h2>
-	<p> FILL THIS IN!!!</p>
+	<h2> New Tools Learned </h2>
+	<h4>Mel Frequency Cepstral Coefficients (MFCCs)</h4>
+	<p>MFCCs are essentially vectors whose entries represent features of one's voice. The way these coefficients are computed involves taking a Short-Time Fourier Transform of approximately 30 ms of speech, and then summing the energy in variable-bandwidth frequency bins called Mel Banks. Each MFCC is one of these sums. The bin bandwidth follows a frequency dependent formula that increases as frequency increases approximately logarithmically. A new set of coefficients is computed for each 30 ms interval (in this example) of speech, and thus the features of speech in each 30 ms interval can be used to determine who is talking. The process for computing MFFCs attempts to mimic the filter inherent to the human ear. Just as humans can distinguish one voice from another, MFCCs should be able to do the same.
+	<br><br>
+	We definitely plan on using MFCCs in our final algorithm in a large capacity. Our preliminary tests with MFCCs have not yielded great results, although this is likely largely due to our treatment of them. Potentially modifying the MFCCs and extracting specific features may improve our results. This is currently what we are investigating.</p>
+
+	<h4>Mahalanobis Distance</h4>
+	<p>Mahalanobis distance is a statistical distance that describes how far away an observation point is from the mean of a distribution, in the context of that distribution. It is an N-variate extension to the z-score which tells us how many standard deviations away an observation is from the mean of a Gaussian distribution. The way the Mahalanobis Distance is computed is pretty simple; however, it is important to understand some concepts first.
+	<br><br>
+	The Cholesky Decomposition of a covariance matrix A describes a change of basis from the canonical basis to a space whose basis vectors are the eigenvectors (with corresponding eigenvalue magnitude) of A. Thus, the inverse of the Cholesky Decomposition of A (as this is always invertible) describes a linear transformation from a space whose basis vectors are the eigenvectors of A to Euclidean space.
+	<br><br>
+	With the preliminaries out of the way, the Mahalanobis distance can be viewed simply. The Mahalanobis distance of an observation vector P' to a distribution D is the 2 norm of P (described later) left-multiplied by the inverse Cholesky decomposition of D, call it L inverse. 
+	<br><br>
+	Before P is multiplied by L inverse, the mean of D is subtracted from P'. This is so the concept of vector spaces and linear transformations makes sense because a vector space must contain the origin, so by subtracting the mean of D from P', mean(D) - P' is the distance from the mean of D to P', allowing P 'to be represented in the space whose basis vectors are L (not inverse). Define P to be mean(D) - P' (a zero-mean version of P' in the context of D). Then, by left-multiplying P by L inverse, we view P in the Euclidean basis, thus allowing us to have a concept of Euclidean distance. The Mahalanobis is simply the inner product of L inverse times P with L inverse times P, i.e. the 2 norm of L inverse times P because L inverse P is the coefficient vector of P in the canonical basis. Thus, the Mahalanobis distance tells us how far away a point P is from a distribution, in the context of that distribution. This concept is very elegant, as it accounts for any correlation between the variables constituting D. All of this information is encoded in the eigenvectors of L.
+	<br><br>
+	Our prelmiinary tests using the Mahalanobis distance have been unsuccesful, although we are currently testing new ideas, such as using the same method with fewer MFCCs (only ones of interest). See more in Progress.</p> 
 	</div>
 
 	<!-- PLAN  -->
@@ -149,7 +167,7 @@
 	Link the speech database we plan to use here, <a href="http://www.speech.cs.cmu.edu/databases/an4/">
 	dataset </a>. </p> <br>
 	<h4> Step 2. Improve Distance Computation</h4>
-	<p> Now we have attempted both a k-th nearest neighbors approach (with k=1) to determine
+	<p> Now we have attempted both a k-th nearest neighbors approach (with k=5) to determine
 	the speaker, and minimizing the Mahalanobis distance to determine speaker. Unfortunately, 
 	both of these methods have not been working especially well - so a major focus of our
 	remaining time will be refining this method. One approach we want to try is finding 
