@@ -75,16 +75,11 @@
 			    <img src="pics/onespeakerhamming.png" alt="">
 		  		</a>
 				<h4> One Speaker Hamming Window Spectrogram</h4>
-      		    <p>  FILL ME IN!! </p>
-   		 	</div>
-		</div>
-  	  	<div class="col-6 col-lg-3">
-    		<div class="thumbnail">
-				<a href = "pics/twospeakershamming.png">
-			  <img src="pics/twospeakershamming.png" alt="">
-		  </a>
-				<h4>Two Speaker Hamming Window Spectrogram</h4>
-      		    <p> FILL ME IN!! </p>
+      		    <p>  This is the spectrogram of a single speaker (~12 seconds long).
+      		    It was computed with a Hamming window. We hypothesize the areas around 
+      		    2 seconds and 11 seconds are fricative sounds based on their spread-spectrum
+      		    frequency response. The areas around 8 seconds and 10 seconds are 
+      		    likely plosive sounds, as they are also spread spectrum but shorter in length. </p>
    		 	</div>
 		</div>
   	  	<div class="col-6 col-lg-3">
@@ -93,9 +88,28 @@
 			  <img src="pics/threespeakerhamming.png" alt="">
 		  </a>
 			<h4>Three Speaker Hamming Window Spectrogram</h4>
-      		    <p> FILL ME IN!! </p>
+      		    <p> This is the spectogram of three speakers (~18 seconds long) computed
+      		    with a Hamming window. For this plot we hypothesize that areas around 5 seconds
+      		    and 13 seconds are fricative sounds based on their spread-spectrum 
+      		    frequency response. The areas around 9 seconds and 10 seconds are probably
+      		    plosive sounds as they are spread spectrum but shorter in length. </p>
    		 	</div>
 		</div>
+
+		<div class="col-6 col-lg-3">
+    		<div class="thumbnail">
+				<a href = "pics/mfcc_plot.png">
+			  <img src="pics/mfcc_plot.png" alt="">
+		  </a>
+			<h4>MFC Coefficients Plot</h4>
+      		    <p> This is the plot of a single sample (30 ms) computed with a Hamming window.
+      		    The signal was band-limited at 300 Hz and 5000 Hz, based on the frequency
+      		    spectrum of typical speech. It was then binned into 25 mel frequency bins. 
+      		    The plot shown here is the result of the MFCC computation, with the x-axis as
+      		    dimension and the y-axis as magnitude. </p>
+   		 	</div>
+		</div>
+
 	</div>
 	<br>
 
@@ -126,7 +140,34 @@
 	<br><br>  
 	<hr class="featurette-divider">
 	<h2> Future Plan </h2>
-	<p> FILL THIS IN!!!</p>
+	<h4> Step 1. Larger Dataset</h4>
+	<p> Test the code we have to compute MFC coefficients against much larger databases
+	of audio samples to see if different speakers have sufficiently different MFCCs
+	to differentiate. This will be more useful than the few samples we have so far as 
+	we can quickly compare thousands of different voices. After computing the MFCCs we
+	plan to attempt to mix the signals to see if we can recover the original speakers. 
+	Link the speech database we plan to use here, <a href="http://www.speech.cs.cmu.edu/databases/an4/">
+	dataset </a>. </p> <br>
+	<h4> Step 2. Improve Distance Computation</h4>
+	<p> Now we have attempted both a k-th nearest neighbors approach (with k=1) to determine
+	the speaker, and minimizing the Mahalanobis distance to determine speaker. Unfortunately, 
+	both of these methods have not been working especially well - so a major focus of our
+	remaining time will be refining this method. One approach we want to try is finding 
+	some type of identifying MFC coefficient for each speaker. This would mean finding a minima or maxima
+	in a certain MFCC (ex. coefficient 9) that uniquely identifies a speaker. Given this
+	information, we could find an identifying feature for each speaker and use that 
+	to determine who is speaking based on their MFCCs.</p> <br>
+	<h4> Step 3. Statistical Model</h4>
+	<p> In order to fully test our speech recognition algorithm we need to create some sort
+	of statistical model to automate the process of determing who is speaking given MFCCs.
+	There are a number of different options including: neural nets, support vector, or 
+	a more basic implementation which only knows a few different speakers.</p> <br>
+	<h4> Step 4. Recover Individual Speech Signals</h4>
+	<p> A stretch goal of this project is to be able to take a sample of many people talking
+	and separate it into each individual speaking one at a time. One idea to do this 
+	would be to recognize each person speaking based on their MFCCs, then trying to 
+	determine which sounds they are making. From this information we should be able
+	to reconstruct each individuals speech signal without the other speakers.</p> <br>
 	</div>
 
 	<!-- ***************** Footer ********************** -->
