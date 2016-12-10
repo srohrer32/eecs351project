@@ -1,205 +1,225 @@
 <!DOCTYPE html>
 <html>
-	<head>
- 		<title>EECS 351 Project</title>
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<style type="text/css">
-	body{
-		padding-left:-40px;
-		padding-right:-40px;
-		padding-top:-100px;
-	}
-    .carousel img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      min-width: 100%;
-	  height: 500px;
-    }
 
-	.carousel-caption {
-	      margin-botton: 100px;
-	      text-align:center;
-	}
-	</style>
-	</head>
+<head>
+    <title>EECS 351 Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-left: -40px;
+            padding-right: -40px;
+            padding-top: -100px;
+        }
+        
+        .carousel img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            height: 500px;
+        }
+        
+        .carousel-caption {
+            margin-botton: 100px;
+            text-align: center;
+        }
+    </style>
 
-	
-	<!-- ********************** Navbar ******************* -->
-	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	  <div class = "container">
-	    <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]} });
+    </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML,http://myserver.com/MathJax/config/local/local.js"></script>
+</head>
+
+
+<!-- ********************** Navbar ******************* -->
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
 	      <span class="sr-only">Toggle navigation</span>
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	    </button>
-	    <a class="navbar-brand" href="#">Home</a>
+        <a class="navbar-brand" href="#">Home</a>
 
-	  <!-- Collect the nav links, forms, and other content for toggling -->
-	  <div class="navbar-collapse collapse navHeaderCollapse">
-	    <ul class="nav navbar-nav">
-	      <li class = ""><a href="#plots">Plots</a></li>
-	      <li class = ""><a href="#progress">Progress</a></li>
-	      <li class = ""><a href="#newtool">New Tools</a></li>
-		  <li class = ""><a href="#plan">Plan</a></li>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="navbar-collapse collapse navHeaderCollapse">
+            <ul class="nav navbar-nav">
+                <li class=""><a href="#intro">Introduction</a></li>
+                <li class=""><a href="#data">Data</a></li>
+                <li class=""><a href="#algorithm">Alogorithm Overview</a></li>
+                <li class=""><a href="#technical">Technical Work</a></li>
+                <li class=""><a href="#results">Experimental Results</a></li>
+                <li class=""><a href="#conclusions">Conclusions</a></li>
+                <li class=""><a href="#references">References</a></li>
+                <li class=""><a href="progress1.html">Progress Report</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- /.navbar-collapse -->
+</div>
 
-	    </ul> 
-	  </div> 
-	  </div><!-- /.navbar-collapse -->
-	</div>
+<!-- *************** Body ***************** -->
 
-	<!-- *************** Body ***************** --> 
-	   
-	<div class="jumbotron">
-  	  	<div class="container">
-    		<br><br><br><br><br><br><br><br><br><br>
-			<h1><center> MFCC Speech Recognition</center></h1>
-			<br><br><h2><center>Robert Malinas and Samuel Rohrer</center></h2>
-			<br><br><br>
-		</div>
-	</div>
-	
-	<!--********************* PLOTS ***********-->
-	<div class = "container">
-	<a name = "plots"></a>
-	<div class="clearfix"></div>
-	<br><br>
-	<hr class="featurette-divider">
-	<h2> Plots </h2>
-	<div class="row">
-  	  	<div class="col-6 col-lg-3">
-    		<div class="thumbnail">
-				<a href = "pics/onespeakerhamming.png">
-			    <img src="pics/onespeakerhamming.png" alt="">
-		  		</a>
-				<h4> One Speaker Hamming Window Spectrogram</h4>
-      		    <p>  This is the spectrogram of a single speaker (~12 seconds long).
-      		    It was computed with a Hamming window. We hypothesize the areas around 
-      		    2 seconds and 11 seconds are fricative sounds based on their spread-spectrum
-      		    frequency response. The areas around 8 seconds and 10 seconds are 
-      		    likely plosive sounds, as they are also spread spectrum but shorter in length. </p>
-   		 	</div>
-		</div>
-  	  	<div class="col-6 col-lg-3">
-    		<div class="thumbnail">
-				<a href = "pics/threespeakerhamming.png">
-			  <img src="pics/threespeakerhamming.png" alt="">
-		  </a>
-			<h4>Three Speaker Hamming Window Spectrogram</h4>
-      		    <p> This is the spectogram of three speakers (~18 seconds long) computed
-      		    with a Hamming window. For this plot we hypothesize that areas around 5 seconds
-      		    and 13 seconds are fricative sounds based on their spread-spectrum 
-      		    frequency response. The areas around 9 seconds and 10 seconds are probably
-      		    plosive sounds as they are spread spectrum but shorter in length. </p>
-   		 	</div>
-		</div>
+<div class="jumbotron">
+    <div class="container">
+        <br><br><br><br><br><br><br><br><br><br>
+        <h1>
+            <center> Speaker Diarization</center>
+        </h1>
+        <br><br>
+        <h2>
+            <center>Robert Malinas and Samuel Rohrer</center>
+        </h2>
+        <br>
+        <h3>
+            <center>December 12, 2016</center>
+        </h3>
+        <br><br>
+    </div>
+</div>
 
-		<div class="col-6 col-lg-3">
-    		<div class="thumbnail">
-				<a href = "pics/mfcc_plot.png">
-			  <img src="pics/mfcc_plot.png" alt="">
-		  </a>
-			<h4>MFC Coefficients Plot</h4>
-      		    <p> This is the plot of a single sample (30 ms) computed with a Hamming window.
-      		    The signal was band-limited at 300 Hz and 5000 Hz, based on the frequency
-      		    spectrum of typical speech. It was then binned into 25 mel frequency bins. 
-      		    The plot shown here is the result of the MFCC computation, with the x-axis as
-      		    dimension and the y-axis as magnitude. </p>
-   		 	</div>
-		</div>
 
-	</div>
-	<br>
+<div class="container">
 
-	<!-- PROGRESS -->
-	<div class ="container">   
-	<a name = "progress"></a> 
-	<div class="clearfix"></div>
-	<br><br>  
-	<hr class="featurette-divider">
-	<h2> Progress </h2>
-	<p>Currently, we have tested 2 methods for determining which speaker is speaking in each disjoint 10 ms interval of time, given a speech segment.
-	<br><br>
-	The first method tested utilizes Mahalanobis distance and MFCCs (described in New Tools Learned). First, a database of MFCCs for each speaker present in the speech segment must be recorded. This database must be diverse, with each speaker saying a variety of words and sounds. Then, the covariance matrix of the databases is calculated. From this, given an MFCC vector in a 10ms interval of speech, the Mahalanobis distance between this MFCC vector and each database can be calculated and compared. The speaker who has the smallest Mahalanobis distance is most likely speaking in this 10 ms interval. This method has been largely unsucessful thus far, and we are investigating using fewer MFCCs. Specifically, we want to determine which MFCCs have the largest variance among the database speakers, and then use a low-rank approximation to the covariance matrix of each database using only these MFCCs.
-	<br><br>
-	Another method we tested is very similar to the first method; however instead of comparing Mahalanobis distance, we employ a k-th nearest neighbor methodology. Given an MFCC vector for a 10 ms time interval, we find the k-th nearest MFCC vectors in a super database which is the union of the databases for each speaker. Then, whichever speaker has the majority of the k-th nearest vectors is likely the person talking in this 10 ms interval. Again, we have had little success with this method. A similar refinement of the MFCCs as described above can be used here. We also have to check on our MFCC calculations. We have compared them with other published pieces of code online and found differences. </p>
-	</div>
+    <!-- Introduction  -->
+    <div class="container">
+        <a name="intro"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Introduction </h2>
+        <p> Given a recording with multiple people speaking at different times (ex. meeting) identify who is speaking in each second. Then we aim to take this information and separate the signal into individual signals for each speaker, or diarize the signal. A prerequisite to this is a past database of samples of all the speakers. </p>
+    </div>
 
-	<!-- NEW TOOLS -->
-	<div class ="container">   
-	<a name = "newtool"></a> 
-	<div class="clearfix"></div>
-	<br><br>  
-	<hr class="featurette-divider">
-	<h2> New Tools Learned </h2>
-	<h4>Mel Frequency Cepstral Coefficients (MFCCs)</h4>
-	<p>MFCCs are essentially vectors whose entries represent features of one's voice. The way these coefficients are computed involves taking a Short-Time Fourier Transform of approximately 30 ms of speech, and then summing the energy in variable-bandwidth frequency bins called Mel Banks. Each MFCC is one of these sums. The bin bandwidth follows a frequency dependent formula that increases as frequency increases approximately logarithmically. A new set of coefficients is computed for each 30 ms interval (in this example) of speech, and thus the features of speech in each 30 ms interval can be used to determine who is talking. The process for computing MFFCs attempts to mimic the filter inherent to the human ear. Just as humans can distinguish one voice from another, MFCCs should be able to do the same.
-	<br><br>
-	We definitely plan on using MFCCs in our final algorithm in a large capacity. Our preliminary tests with MFCCs have not yielded great results, although this is likely largely due to our treatment of them. Potentially modifying the MFCCs and extracting specific features may improve our results. This is currently what we are investigating.</p>
+    <!-- Data  -->
+    <div class="container">
+        <a name="data"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Data </h2>
+        <div class="row">
+            <div class="col-3 col-lg-3">
+                <div class="thumbnail">
+                    <a href="pics/onespeakerhamming.png">
+                        <img src="pics/onespeakerhamming.png" alt="">
+                    </a>
+                    <h4> One Speaker Hamming Window Spectrogram</h4>
+                    <p> This is the spectrogram of a single speaker (~12 seconds long). It was computed with a Hamming window. We hypothesize the areas around 2 seconds and 11 seconds are fricative sounds based on their spread-spectrum frequency response. The areas around 8 seconds and 10 seconds are likely plosive sounds, as they are also spread spectrum but shorter in length. </p>
+                </div>
+            </div>
+            <div class="col-3 col-lg-3">
+                <div class="thumbnail">
+                    <a href="pics/threespeakerhamming.png">
+                        <img src="pics/threespeakerhamming.png" alt="">
+                    </a>
+                    <h4>Three Speaker Hamming Window Spectrogram</h4>
+                    <p> This is the spectogram of three speakers (~18 seconds long) computed with a Hamming window. For this plot we hypothesize that areas around 5 seconds and 13 seconds are fricative sounds based on their spread-spectrum frequency response. The areas around 9 seconds and 10 seconds are probably plosive sounds as they are spread spectrum but shorter in length. </p>
+                </div>
+            </div>
 
-	<h4>Mahalanobis Distance</h4>
-	<p>Mahalanobis distance is a statistical distance that describes how far away an observation point is from the mean of a distribution, in the context of that distribution. It is an N-variate extension to the z-score which tells us how many standard deviations away an observation is from the mean of a Gaussian distribution. The way the Mahalanobis Distance is computed is pretty simple; however, it is important to understand some concepts first.
-	<br><br>
-	The Cholesky Decomposition of a covariance matrix A describes a change of basis from the canonical basis to a space whose basis vectors are the eigenvectors (with corresponding eigenvalue magnitude) of A. Thus, the inverse of the Cholesky Decomposition of A (as this is always invertible) describes a linear transformation from a space whose basis vectors are the eigenvectors of A to Euclidean space.
-	<br><br>
-	With the preliminaries out of the way, the Mahalanobis distance can be viewed simply. The Mahalanobis distance of an observation vector P' to a distribution D is the 2 norm of P (described later) left-multiplied by the inverse Cholesky decomposition of D, call it L inverse. 
-	<br><br>
-	Before P is multiplied by L inverse, the mean of D is subtracted from P'. This is so the concept of vector spaces and linear transformations makes sense because a vector space must contain the origin, so by subtracting the mean of D from P', mean(D) - P' is the distance from the mean of D to P', allowing P 'to be represented in the space whose basis vectors are L (not inverse). Define P to be mean(D) - P' (a zero-mean version of P' in the context of D). Then, by left-multiplying P by L inverse, we view P in the Euclidean basis, thus allowing us to have a concept of Euclidean distance. The Mahalanobis is simply the inner product of L inverse times P with L inverse times P, i.e. the 2 norm of L inverse times P because L inverse P is the coefficient vector of P in the canonical basis. Thus, the Mahalanobis distance tells us how far away a point P is from a distribution, in the context of that distribution. This concept is very elegant, as it accounts for any correlation between the variables constituting D. All of this information is encoded in the eigenvectors of L.
-	<br><br>
-	Our prelmiinary tests using the Mahalanobis distance have been unsuccesful, although we are currently testing new ideas, such as using the same method with fewer MFCCs (only ones of interest). See more in Progress.</p> 
-	</div>
+            <div class="col-3 col-lg-3">
+                <div class="thumbnail">
+                    <a href="pics/mfcc_plot.png">
+                        <img src="pics/mfcc_plot.png" alt="">
+                    </a>
+                    <h4>MFC Coefficients Plot</h4>
+                    <p> This is the plot of a single sample (30 ms) computed with a Hamming window. The signal was band-limited at 300 Hz and 5000 Hz, based on the frequency spectrum of typical speech. It was then binned into 25 mel frequency bins. The plot shown here is the result of the MFCC computation, with the x-axis as dimension and the y-axis as magnitude. </p>
+                </div>
+            </div>
 
-	<!-- PLAN  -->
-	<div class ="container">   
-	<a name = "plan"></a> 
-	<div class="clearfix"></div>
-	<br><br>  
-	<hr class="featurette-divider">
-	<h2> Future Plan </h2>
-	<h4> Step 1. Larger Dataset</h4>
-	<p> Test the code we have to compute MFC coefficients against much larger databases
-	of audio samples to see if different speakers have sufficiently different MFCCs
-	to differentiate. This will be more useful than the few samples we have so far as 
-	we can quickly compare thousands of different voices. After computing the MFCCs we
-	plan to attempt to mix the signals to see if we can recover the original speakers. 
-	Link the speech database we plan to use here, <a href="http://www.speech.cs.cmu.edu/databases/an4/">
-	dataset </a>. </p> <br>
-	<h4> Step 2. Improve Distance Computation</h4>
-	<p> Now we have attempted both a k-th nearest neighbors approach (with k=5) to determine
-	the speaker, and minimizing the Mahalanobis distance to determine speaker. Unfortunately, 
-	both of these methods have not been working especially well - so a major focus of our
-	remaining time will be refining this method. One approach we want to try is finding 
-	some type of identifying MFC coefficient for each speaker. This would mean finding a minima or maxima
-	in a certain MFCC (ex. coefficient 9) that uniquely identifies a speaker. Given this
-	information, we could find an identifying feature for each speaker and use that 
-	to determine who is speaking based on their MFCCs.</p> <br>
-	<h4> Step 3. Statistical Model</h4>
-	<p> In order to fully test our speech recognition algorithm we need to create some sort
-	of statistical model to automate the process of determing who is speaking given MFCCs.
-	There are a number of different options including: neural nets, support vector, or 
-	a more basic implementation which only knows a few different speakers.</p> <br>
-	<h4> Step 4. Recover Individual Speech Signals</h4>
-	<p> A stretch goal of this project is to be able to take a sample of many people talking
-	and separate it into each individual speaking one at a time. One idea to do this 
-	would be to recognize each person speaking based on their MFCCs, then trying to 
-	determine which sounds they are making. From this information we should be able
-	to reconstruct each individuals speech signal without the other speakers.</p> <br>
-	</div>
+        </div>
+    </div>
 
-	<!-- ***************** Footer ********************** -->
-	<div class="clearfix"></div>
-	<br><br>  
-	<hr class="featurette-divider">
+    <!-- Algorithms  -->
+    <div class="container">
+        <a name="algorithm"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Algorithm Overview </h2>
+
+    </div>
+
+    <!-- Technical Work  -->
+    <div class="container">
+        <a name="technical"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Technical Work </h2>
+        <p>
+            When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+        </p>
+        <br>
+        <h3> Audio Features </h3>
+        <br>
+        <h4> Envelopes </h4>
+        <br>
+        <h4> Mel Frequency Cepstrum Coefficients (MFCCs) </h4>
+
+        <br>
+        <h3> Speaker Classification </h3>
+        <br>
+        <h4> Kth Nearest Neighbors </h4>
+        <br>
+        <h4> Mahalanobis Distance </h4>
+
+    </div>
+
+    <!-- Results  -->
+    <div class="container">
+        <a name="results"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Experimental Results </h2>
+
+        <br>
+        <h3> Error Correction </h3>
+
+    </div>
+
+    <!-- Conclusions  -->
+    <div class="container">
+        <a name="conclusions"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> Conclusions </h2>
+
+    </div>
+
+    <!-- References  -->
+    <div class="container">
+        <a name="references"></a>
+        <div class="clearfix"></div>
+        <br><br>
+        <hr class="featurette-divider">
+        <h2> References </h2>
+        <p> [1] M. Yankayis, "Feature Extraction Mel Frequency Cepstral Coefficients (MFFCs)," in YTU. Computer Engineering Department Website, 16-Nov-2016. </p><br>
+        <p>[2] P. C. Mahalanobis, "On the generalized distance in statistics," Proc. Natl. Inst. Sci. India, vol. 2, no. 1, pp. 49–55, 1936. </p><br>
+        <p>[3] K. Wojcicki, HTK MFCC MATLAB (Version 1.2). Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/</p><br>
+        <p>[4] K. Wojcicki, Triangular Filterbank (Version 1.1). Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/ </p><br>
+        <p>[5] K. Wojcicki, Framing Routines. Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/ </p>
+    </div>
+
+    <!-- ***************** Footer ********************** -->
+    <div class="clearfix"></div>
+    <br><br>
+    <hr class="featurette-divider">
     <footer>
-      <p class="pull-right"><a href="#top">Back to top</a></p>
-      <p>2016. Website built using Twitter Bootstrap.</p>
+        <p class="pull-right"><a href="#top">Back to top</a></p>
+        <p>2016. Website built using Twitter Bootstrap.</p>
     </footer>
-	</div>
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="website/js/bootstrap.min.js"></script>
-	
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="website/js/bootstrap.min.js"></script>
+
 </body>
+
 </html>
