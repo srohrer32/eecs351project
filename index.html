@@ -247,6 +247,55 @@
             <a name="mahalanobis"></a>
             <br>
             <h4> Mahalanobis Distance </h4>
+            <p>
+            <h5><b>Introduction</b></h5>
+            In this section, the Mahalanobis Distance and its utilization with MFCCs are discussed. Suppose the MFFCs for each speaker are distributed in an N-dimensional space, and there exists a unique distribution for each speaker. Then, it would be useful to determine how likely it is that an MFCC vector belongs to an specific speaker's distribution. During development, this idea was tested and confirmed.</p><br>
+
+            <h5><b>Mathematics and Explanation</b></h5>
+            <p>Consider a real N-dimensional column vector $ \mathbf{\vec{v}} $. Then, let $ \mathbf{S} $ be the covariance matrix of a real N-dimensional distribution and let $\boldsymbol{\vec{\mu}}$ be a vector containing the mean along each dimension of this distribution. The Mahalanobis Distance is defined as
+
+            $$ \begin{equation} D_{M} = \sqrt{(\mathbf{\vec{v}} - \boldsymbol{\vec{\mu}})^{\,T}\mathbf{S}^{-1}(\mathbf{\vec{v}} - \boldsymbol{\vec{\mu}})}. \end{equation}$$ 
+
+            Let
+
+            $$ \begin{equation} \mathbf{\vec{d}} = \mathbf{\vec{v}} - \boldsymbol{\vec{\mu}}. \end{equation}$$
+
+            Note that $\mathbf{\vec{d}}$ is simply the vector difference between the vector being compared to the distribution, $\mathbf{\vec{v}}$, and the mean vector, $\boldsymbol{\vec{\mu}}$. The importance of $\mathbf{\vec{d}}$ will become clear shortly. It is difficult to understand the Mahalanobis Distance from (12). To develop intuition, consider the relation
+            
+            $$ \begin{equation} \mathbf{S} = \mathbf{LL}^T, \end{equation}$$ 
+
+            where $\mathbf{L}$ is the Cholesky Decomposition of $\mathbf{S}$. This decomposition is guaranteed to exist because $\mathbf{S}$, being a covariance matrix, is positive semi-definite. After combining (12), (13), and (14), the result reduces to 
+
+            $$\begin{equation} D_{M} = \sqrt{<\mathbf{L^{-1}\vec{d}}, \mathbf{L^{-1}\vec{d}}>}, \end{equation}$$
+
+            which is simply the 2-norm of the vector $\mathbf{L^{-1}\vec{d}}$. Another important relation will clarify why the Mahalanobis distance works. Consider a completely uncorrelated N-dimensional random column vector $\mathbf{X}$ that has unit variance along each dimension. Let 
+
+            $$\begin{equation} \mathbf{I} = cov(\mathbf{X}). \end{equation}$$
+            
+             The symbol $\mathbf{I}$ was chosen intentionally, as this covariance matrix is necessarily an N by N identity matrix. Now, suppose $\mathbf{X}$ is linearly transformed by a matrix $\mathbf{L}$. Again, the choice of the symbol $\mathbf{L}$ for the transformation matrix is intentional. Then,
+
+            $$\begin{equation} cov(\mathbf{LX}) = \mathbf{L}cov(\mathbf{X})\mathbf{L}^T, \end{equation}$$
+
+            but (16) shows that $cov(\mathbf{X})$ is an identity matrix. Therefore, (17) becomes
+
+            $$\begin{equation} cov(\mathbf{LX}) = \mathbf{LL}^T = \mathbf{S}. \end{equation}$$
+            
+            This profound result shows that a random sample distribution of N-dimensional vectors with covariance matrix $ \mathbf{S}$ can be linearly transformed by the inverse Cholesky decomposition of $ \mathbf{S} $, namely $\mathbf{L^{-1}}$, to become an uncorrelated distribution that has unit variance along each dimension. This completely removes the bias caused by the distribution from each sample vector. Then, it is clear that the Mahalanobis Distance is simply 2-norm of the difference vector $\mathbf{\vec{d}}$ when viewed in the context of an orthonormal basis$^1$ that is chosen carefully to remove the bias of the distribution. For a less rigorous, intuitive description of the Mahalanobis distance, continue reading.</p>
+
+            <h5><b>Intuitive Description</b></h5>
+            <p> The Mahalanobis Distance is an N-dimensional analogue to the z-score, which tells how many standard deviations a point is away from the mean in a Gaussian distribution. The z-score of a sample point with respect to a distribution allows one to determine how likely it is that this sample point belongs to the distribution. If two z-scores are calculated for the sample point, each with respect to a unique distribution, then the point most likely belongs to the distribution with which it has the lesser z-score. The same principle can be applied using the Mahalanobis Distance for N-variate distributions. Given an N-dimensional sample vector and two distributions, the sample vector most likely belongs to the distribution with which it has a lesser Mahalanobis distance. Another way to view this is that the sample vector is "less of an outlier" in the distribution where its Mahalanobis distance is the smallest.
+            </p>
+
+            <h5><b>Method of Classification</b></h5>
+            <p> Consider two speakers, speaker A and speaker B. With the idea that MFCCs for each speaker follow a unique distribution, the Mahalanobis Distance can be utilized to classify MFCC vectors as either belonging to speaker A or speaker B. Given databases of MFCC vectors for both speakers A and B, the covariance matrices and mean vectors can be calculated for each database. Then, given an MFCC vector from the input speech signal, one can determine that this MFCC vector most likely belongs to the database with which it has a lesser Mahalanobis distance. Because each MFCC vector is calculated during a unique interval of time, this classification method allows one to determine which speaker is speaking in each corresponding interval of time. Namely, whichever speaker has the lesser Mahalanobis distance with respect to this MFCC vector can be classified as speaking in the interval of time for which this MFCC vector was calculated. This classifier was implemented, and the results were better than that of the K-th Nearest Neighbor classifier.</p>
+
+            <h5><b>Implementation</b></h5>
+            <p>The implementation for the Mahalanobis classifier is very efficient. In addition to being pedagocially effective, the Cholesky Decomposition is known to be incredibly fast to compute. The Mahalanobis classifier outperforms the K-th Nearest Neighbor classifier, taking a meager 18$\mu$s to determine the speaker versus the 34ms that the KNN algorithm takes. The determineSpeaker function simply takes in the covariance matrices and mean vectors of each speaker in question, calculates the Mahalanobis distance of each using the Cholesky Decomposition, and then returns the speaker that has the lesser Mahalanobis distance.</p>
+
+            </p>
+            <br><br>
+            <font size = "0.5"> $^1$ For those interested, this orthonormal basis is actually the set of all eigenvectors of the covariance matrix $\mathbf{S}$, each divided by its respective eigenvalue. Additionally, $\mathbf{L}$ has the same eigenvectors as $\mathbf{S}$, with each eigenvalue being the square root of the respective eigenvalue of $\mathbf{S}$. 
+            </font>
 
     </div>
 
