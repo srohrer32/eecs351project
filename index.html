@@ -25,7 +25,9 @@
             text-align: center;
         }
     </style>
-
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "AMS" } } });
+    </script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({ tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]} });
     </script>
@@ -169,20 +171,13 @@
             <h3> Audio Features </h3>
             <br>
             <h4> Envelopes </h4>
-            <p> Based on reference [1], we know that peaks in the spectral envelope
-            of the time domain signal are known as formants. Additionally, different
-            speakers have different formants and different sounds also have different 
-            formants. We first computed the envelope of the absolute value of the signal.
-            In order to identify the formants, we compute the energy
-            under the envelope at 6 different thresholds. The thresholds
-            include less and less of the signal to help identify the formants.
-            The features used were:
-            $$ e_1 = trapz(envelope(envelope > thd)), thd = \frac{1}{2}$$
-            $$ e_2 = trapz(envelope(envelope > thd)), thd = \frac{5}{9}$$
-            $$ e_3 = trapz(envelope(envelope > thd)), thd = \frac{5}{8}$$
-            $$ e_4 = trapz(envelope(envelope > thd)), thd = \frac{2}{3}$$
-            $$ e_5 = trapz(envelope(envelope > thd)), thd = \frac{3}{4}$$
-            $$ e_6 = trapz(envelope(envelope > thd)), thd = \frac{7}{8}$$ </p><br>
+            <p> Based on reference [1], we know that peaks in the spectral envelope of the time domain signal are known as formants. Additionally, different speakers have different formants and different sounds also have different formants. We first computed the envelope of the absolute value of the signal. In order to identify the formants, we compute the energy under the envelope at 6 different thresholds. The thresholds include less and less of the signal to help identify the formants. The features used were: 
+            $$ \begin{equation} e_1 = trapz(envelope(envelope > thd)), thd = \frac{1}{2} \end{equation} $$ 
+            $$ \begin{equation} e_2 = trapz(envelope(envelope > thd)), thd = \frac{5}{9} \end{equation}$$ 
+            $$ \begin{equation} e_3 = trapz(envelope(envelope > thd)), thd = \frac{5}{8} \end{equation}$$ 
+            $$ \begin{equation} e_4 = trapz(envelope(envelope > thd)), thd = \frac{2}{3} \end{equation}$$ 
+            $$ \begin{equation} e_5 = trapz(envelope(envelope > thd)), thd = \frac{3}{4} \end{equation}$$ 
+            $$ \begin{equation} e_6 = trapz(envelope(envelope > thd)), thd = \frac{7}{8} \end{equation}$$ </p><br>
 
             <div class="row">
                 <div class="col-3 col-lg-3">
@@ -212,11 +207,11 @@
             <h4> Mel Frequency Cepstrum Coefficients (MFCCs) </h4>
             <p> Here we outline the steps required to generate MFCCs. MFCCs measure the short term log power spectrum of the signal. This is based on the Mel scale (see image below), which separates the frequency spectrum into non-linear bins which more closely mimic human hearing. The Mel scale achieves this with smaller bins (~100 Hz wide) at lower frequencies and larger bins (~1000 Hz wide) at higher frequencies.</p><br>
 
-            <p> 1) Window the signal into 30 ms intervals with a 20 ms overlap, which means that there are 10 ms of new signal information for every window. Then a Hamming window was applied following this formula ($N=30$, $n=[1,30]$): $$ W(n) = 0.54 + 0.46*cos(\frac{2\pi n}{N-1}) $$ </p> <br>
+            <p> 1) Window the signal into 30 ms intervals with a 20 ms overlap, which means that there are 10 ms of new signal information for every window. Then a Hamming window was applied following this formula ($N=30$, $n=[1,30]$): $$ \begin{equation} W(n) = 0.54 + 0.46*cos(\frac{2\pi n}{N-1}) \end{equation} $$ </p> <br>
             <p> 2) Compute the Fast Fourier Transform (FFT) of the windowed signal </p> <br>
-            <p> 3) Compute the magnitude of the FFT coefficients: $$ FFT_{mag} = (||FFT||)^2 $$ </p><br>
-            <p> 4) Choose $f_{max} = 3000 Hz$, $f_{min} = 100 Hz$, and the number of Mel bins $Bins_{Mel} = 15$. Compute the Mel scale: $$ f_{max} Mels = 1125 * log(1 + \frac{f_{max} Hz}{700})$$ $$ f_{min} Mels = 1125 * log(1 + \frac{f_{min} Hz}{700})$$ </p><br>
-            <p> 5) Using $f_{max}$ and $f_{min}$ in Mels, and the number of Mel bins create equispaced filters on the Mel scale. Next convert these Mel frequencies back to Hz to determine the location of the filters: $$ f_{filter} Hz = 700 * (e^{\frac{f_{filter} Mel}{1125}} - 1) $$ This creates a Mel filter bank similar to the image, "Sample Mel Filter Bank".</p><br>
+            <p> 3) Compute the magnitude of the FFT coefficients: $$ \begin{equation} FFT_{mag} = |FFT|^2 \end{equation}$$ </p><br>
+            <p> 4) Choose $f_{max} = 3000 Hz$, $f_{min} = 100 Hz$, and the number of Mel bins $Bins_{Mel} = 15$. Compute the Mel scale: $$\begin{equation} f_{max} Mels = 1125 * log(1 + \frac{f_{max} Hz}{700})\end{equation}$$ $$\begin{equation} f_{min} Mels = 1125 * log(1 + \frac{f_{min} Hz}{700})\end{equation}$$ </p><br>
+            <p> 5) Using $f_{max}$ and $f_{min}$ in Mels, and the number of Mel bins create equispaced filters on the Mel scale. Next convert these Mel frequencies back to Hz to determine the location of the filters: $$\begin{equation} f_{filter} Hz = 700 * (e^{\frac{f_{filter} Mel}{1125}} - 1) \end{equation}$$ This creates a Mel filter bank similar to the image, "Sample Mel Filter Bank".</p><br>
             <p> 6) Compute the magnitude of $FFF_{mag}$ within each of the triangular Mel filter banks. </p><br>
             <p> 7) Compute the log of these magnitudes. Length of vector here should be equal to the number of Mel bins. </p><br>
             <p> 8) Generate the MFCCs by computing the Inverse FFT of the log of magnitudes. In this case the IFFT reduces to the Discrete Cosine Transform (DCT). The result should be similar to the image "Sample MFCCs".</p><br>
@@ -287,7 +282,7 @@
         <hr class="featurette-divider">
         <h2> References </h2>
         <p> [1] M. Yankayis, "Feature Extraction Mel Frequency Cepstral Coefficients (MFFCs)," in YTU. Computer Engineering Department Website, 16-Nov-2016. </p><br>
-        <p>[2] P. C. Mahalanobis, "On the generalized distance in statistics," Proc. Natl. Inst. Sci. India, vol. 2, no. 1, pp. 49–55, 1936. </p><br>
+        <p>[2] P. C. Mahalanobis, "On the generalized distance in statistics," Proc. Natl. Inst. Sci. India, vol. 2, no. 1, pp. 49-55, 1936. </p><br>
         <p>[3] K. Wojcicki, HTK MFCC MATLAB (Version 1.2). Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/</p><br>
         <p>[4] K. Wojcicki, Triangular Filterbank (Version 1.1). Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/ </p><br>
         <p>[5] K. Wojcicki, Framing Routines. Source code. Mathworks. 2011. https://www.mathworks.com/matlabcentral/fileexchange/ </p>
