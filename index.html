@@ -108,6 +108,9 @@
         <br><br>
         <hr class="featurette-divider">
         <h2> Data </h2>
+        <p> The primary source of data we used in our project was MFCC databases and speech recordings for a variety of speakers. For each speaker in the recordings, a database of MFCCs is required for the algorithm to work. To gather these databases, we recorded each person that speaks in the input speech signal separately, ran them through the MFCC algorithm, and placed their MFCCs in a matrix. An example of an MFCC vector is seen below to the right.</p>
+        <p> In the preliminary brainstorming stages of the project, we examined spectrograms of different speakers. An example of such a spectrogram is seen below to the left. Despite not using spectrograms in the final algorithm, they served as a stepping stone to MFCCs. They are similar to MFCCs in that they also represent short-time frequency data. Understanding spectrograms and the windowing involved in generating them was a key step to understanding MFCCs. In the spectrogram below to the left, one speaker is talking. We used a Hamming window for each short-time Fourier transform to avoid spectral leakage. Additional spectrograms can be seen in our progress report.</p>
+        <p> Finally, actual speech data can be seen in the center picture below. This speech data contains two speakers talking, and this was a speech sample that we used to test our algorithm during development. Again, the goal is to separate such speech signals into individual signals with only one speaker talking.</p>
         <div class="row">
             <div class="col-3 col-lg-3">
                 <div class="thumbnail">
@@ -120,11 +123,11 @@
             </div>
             <div class="col-3 col-lg-3">
                 <div class="thumbnail">
-                    <a href="pics/threespeakerhamming.png">
-                        <img src="pics/threespeakerhamming.png" alt="">
+                    <a href="pics/twospeakersspeech.png">
+                        <img src="pics/twospeakersspeech.png" alt="">
                     </a>
-                    <h4>Three Speaker Hamming Window Spectrogram</h4>
-                    <p> This is the spectogram of three speakers (~18 seconds long) computed with a Hamming window. For this plot we hypothesize that areas around 5 seconds and 13 seconds are fricative sounds based on their spread-spectrum frequency response. The areas around 9 seconds and 10 seconds are probably plosive sounds as they are spread spectrum but shorter in length. </p>
+                    <h4>Speech signal with two speakers</h4>
+                    <p> This is a speech signal to be inputted to the algorithm. The goal of the algorithm is to separate this speech signal into two separate signals, each with only one speaker talking. </p>
                 </div>
             </div>
 
