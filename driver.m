@@ -83,18 +83,50 @@ filterout = speakerAvg(nobreath_speaker, numSpeakers, filterparam);
 speaker(filterout>1.5) = 2;
 speaker(filterout<=1.5) = 1;
 
-
 % call dilute 
 diluteParam = 100;
 [dilutedSpeaker] = dilute(speaker, diluteParam, cols);
-%dilutedSpeaker = speaker(1:numel(dilutedSpeaker_nofilter));
 
-%error analysis
+% -------- actually diarize the signal ---------------
+samples10ms = fs / 100;
+onlySpeaker1 = 0 * timevec;
+onlySpeaker2 = 0 * timevec;
+for i=1:numel(timevec)/samples10ms
+	if speaker(i) == 1
+		onlySpeaker1((i-1)*samples10ms + 1 : i*samples10ms) = timevec((i-1)*samples10ms + 1 : i*samples10ms);
+	elseif speaker(i) == 2
+		onlySpeaker2((i-1)*samples10ms + 1 : i*samples10ms) = timevec((i-1)*samples10ms + 1 : i*samples10ms);
+	end
+end
+% write to files
+audiowrite('data/speaker1.wav', onlySpeaker1, fs);
+audiowrite('data/speaker2.wav', onlySpeaker2, fs);
+
+% -------- plot a few figures -----------------
+figure;
+subplot(4,1,1);
+plot(timevec); axis tight; grid on; xlabel('Time Samples @ 44100 Hz');
+ylabel('Magnitude'); title('Input Signal versus Time');
+
+subplot(4,1,2);
+plot(speaker, '.', 'MarkerSize', 2); axis tight; grid on; xlabel('10 ms Interval');
+ylabel('Speaker Classification'); title('Speaker Classification after Error Correction')
+
+subplot(4,1,3);
+plot(onlySpeaker1); axis tight; grid on; xlabel('Time Samples @ 44100 Hz');
+ylabel('Magnitude'); title('Only Speaker 1 after Diarization');
+
+subplot(4,1,4);
+plot(onlySpeaker2); axis tight; grid on; xlabel('Time Samples @ 44100 Hz');
+ylabel('Magnitude'); title('Only Speaker 2 after Diarization');
+
+
+%---- error analysis ----------------
 correct = [ones(1,134)*1 ones(1,1038)*2 ones(1,1688)*1];
-orig = double([correct==2; correct==1]);
-test_pre_error = double([speaker_pre_error==2; speaker_pre_error==1]);
-test_post_error = double([speaker==2; speaker==1]);
-plotconfusion(orig, test_post_error, 'MFCC Feautres, Mahalanobis Distance, Post-Error')
-figure(); 
-orig = orig(:, 2: size(orig, 2) - 1);
-plotconfusion(orig, test_pre_error, 'MFCC Features, Mahalanobis Distance, Pre-Error')
+%orig = double([correct==2; correct==1]);
+%test_pre_error = double([speaker_pre_error==2; speaker_pre_error==1]);
+%test_post_error = double([speaker==2; speaker==1]);
+%plotconfusion(orig, test_post_error, 'MFCC Feautres, Mahalanobis Distance, Post-Error')
+%figure(); 
+%orig = orig(:, 2: size(orig, 2) - 1);
+%plotconfusion(orig, test_pre_error, 'MFCC Features, Mahalanobis Distance, Pre-Error')
