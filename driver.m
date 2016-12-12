@@ -19,7 +19,7 @@ fs = 44100;
 
 % sample of both
 % Read speech samples, sampling rate and precision from file
-[speech] = audioread( '../data/bobtravisbothtest.wav' );
+[speech] = audioread( 'data/bobtravisbothtest.wav' );
 timevec = speech(:,1);
 % Feature extraction (feature vectors as columns)
 [MFCCboth, FBEs, frames ] = ...
@@ -28,7 +28,7 @@ mfcconline( speech(:,1), fs, Tw, Ts, alpha, hamming, R, M, C, L );
 %MFCCboth = [MFCCboth; envelopeCalc(frames)];
 
 % sample A
-[speech] = audioread( '../data/bobcontroltestwtravis.wav' );       
+[speech] = audioread( 'data/bobcontroltestwtravis.wav' );       
 % Feature extraction (feature vectors as columns)
 [MFCCa, FBEs, frames ] = ...
 mfcconline( speech(:,1), fs, Tw, Ts, alpha, hamming, R, M, C, L );
@@ -36,7 +36,7 @@ mfcconline( speech(:,1), fs, Tw, Ts, alpha, hamming, R, M, C, L );
 %MFCCa = [MFCCa; envelopeCalc(frames)];
 
 % sample B
-[speech] = audioread( '../data/travistest.wav' );    
+[speech] = audioread( 'data/travistest.wav' );    
 % Feature extraction (feature vectors as columns)
 [ MFCCb, FBEs, frames ] = ...
 mfcconline( speech(:,1), fs, Tw, Ts, alpha, hamming, R, M, C, L );
