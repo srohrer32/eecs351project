@@ -175,7 +175,8 @@
             <h3> Audio Features </h3>
             <br>
             <h4> Envelopes </h4>
-            <p> Based on reference [1], we know that peaks in the spectral envelope of the time domain signal are known as formants. Additionally, different speakers have different formants and different sounds also have different formants. We first computed the envelope of the absolute value of the signal. In order to identify the formants, we compute the energy under the envelope at six different thresholds. The thresholds include less and less of the signal to help identify the formants. The features used were: $$ \begin{equation} e_1 = trapz(envelope(envelope > thd)), thd = \frac{1}{2} \end{equation} $$ $$ \begin{equation} e_2 = trapz(envelope(envelope > thd)), thd = \frac{5}{9} \end{equation}$$ $$ \begin{equation} e_3 = trapz(envelope(envelope > thd)), thd = \frac{5}{8} \end{equation}$$ $$ \begin{equation} e_4 = trapz(envelope(envelope > thd)), thd = \frac{2}{3} \end{equation}$$ $$ \begin{equation} e_5 = trapz(envelope(envelope > thd)), thd = \frac{3}{4} \end{equation}$$ $$ \begin{equation} e_6 = trapz(envelope(envelope > thd)), thd = \frac{7}{8} \end{equation}$$ </p><br>
+            <p> Based on reference [1], we know that peaks in the spectral envelope of the time domain signal are known as formants. Additionally, different speakers have different formants and different sounds also have different formants. We first computed the envelope of the absolute value of the signal. In order to identify the formants, we compute the energy under the envelope at six different thresholds. The thresholds include less and less of the signal to help identify the formants. The features used were (in MATLAB)
+            : $$ \begin{equation} e_1 = trapz(envelope(envelope > thd)), thd = \frac{1}{2} \end{equation} $$ $$ \begin{equation} e_2 = trapz(envelope(envelope > thd)), thd = \frac{5}{9} \end{equation}$$ $$ \begin{equation} e_3 = trapz(envelope(envelope > thd)), thd = \frac{5}{8} \end{equation}$$ $$ \begin{equation} e_4 = trapz(envelope(envelope > thd)), thd = \frac{2}{3} \end{equation}$$ $$ \begin{equation} e_5 = trapz(envelope(envelope > thd)), thd = \frac{3}{4} \end{equation}$$ $$ \begin{equation} e_6 = trapz(envelope(envelope > thd)), thd = \frac{7}{8} \end{equation}$$ </p><br>
 
             <div class="row">
                 <div class="col-3 col-lg-3">
@@ -392,16 +393,11 @@
         <p> Even after accounting for silences and breaths, it is evident that the classifier output, displayed in the last plot above, still needs work. During the analysis of this data, we noticed that the density of correct classifications per unit time was far greater than the density of misclassifications per unit time. We call these isolated misclassifications, an example of which is a sequence of classifications $[ 2, 2, 2, 1, 2, 2] $ that we know should be $[ 2, 2, 2, 2, 2, 2]$. To resolve this issue, we took at 2.2 second long causal moving average of the surrounding classifications and removed the effect of silent portions (marked as speaker 1.5) when calculating the mean using the method described in 1) Remove Effect of Silence. This filter had the effect of measuring the density of classification points, which was our goal. If the filter output was greater than 1.5, then the algorithm determined that speaker 2 was talking, and likewise if the filter was less than 1.5 for speaker 1. The filter output is plotted below, along with a constant line at 1.5.</p> 
 
         <p>Another interesting property of the filter was a local max/min when the classifier predicted that a new speaker begins talking. Of course, a 2.2 second moving average requires more than 1.1 seconds of speaker classifications of the correct speaker to exist within the average. Thus, the resolution of this filter is 1.1 seconds, and a 1.1 second delay on speaker classification will occur when the algorithm estimates a change in speaker. </p><br>
-        <div class="row">
-            <div class="col-3 col-lg-3">
-                <div class="thumbnail">
+
                     <a href="pics/speaker_avg.png">
                         <img src="pics/speaker_avg.png" alt="">
                     </a>
-                    <h4> Speaker after Moving Average Filter versus Time</h4>
-                </div>
-            </div>
-        </div>
+  
 
         <h3> Final Results (after Error Correction) </h3>
         <p> Below are confusion matrices for each permutation of classifier and features used for the classifier data after these proposed corrections were made. </p>
@@ -474,6 +470,8 @@
                <img src="pics/demo.png" alt="">
             </a>
             <p> And the resulting sounds files should be:</p>
+            <h4> Both Speakers </h4>
+            <audio src="sound/bothspeaker.wav" preload="auto" controls></audio>
             <h4> Speaker 1 Only </h4>
             <audio src="sound/speaker1.wav" preload="auto" controls></audio>
             <h4> Speaker 2 Only </h4>
