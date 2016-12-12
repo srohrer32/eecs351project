@@ -55,6 +55,7 @@
                 <li class=""><a href="#technical">Technical Work</a></li>
                 <li class=""><a href="#results">Experimental Results</a></li>
                 <li class=""><a href="#conclusions">Conclusions</a></li>
+                <li class=""><a href="#demo">Demo</a></li>
                 <li class=""><a href="#references">References</a></li>
                 <li class=""><a href="progress1.html">Progress Report</a></li>
             </ul>
@@ -168,7 +169,7 @@
         <br><br>
         <hr class="featurette-divider">
         <h2> Technical Work </h2>
-        <p> In this section we present the technical work conducted throughout the semester while trying to create a speaker diarization system. There are two sections, audio features and speaker classification. In audio features we discuss envelopes and MFCCs. In speaker classification, we discuss the $K^{th}$ nearest neighbors method and the Mahalanobis distance method. Note that not all algorithms discussed were used in the final speaker diarization system.
+        <p> In this section we present the technical work conducted throughout the semester while trying to create a speaker diarization system. There are two sections, audio features and speaker classification. In audio features we discuss envelopes and MFCCs. In speaker classification, we discuss the $K^{th}$ Nearest Neighbors method and the Mahalanobis distance method. Note that not all algorithms discussed were used in the final speaker diarization system.
             <a name="envelopes"></a>
             <br>
             <h3> Audio Features </h3>
@@ -204,14 +205,15 @@
             <h4> Mel Frequency Cepstrum Coefficients (MFCCs) </h4>
             <p> Here we outline the steps required to generate MFCCs. MFCCs measure the short term log power spectrum of the signal. This is based on the Mel scale (see image below), which separates the frequency spectrum into non-linear bins which more closely mimic human hearing. The Mel scale achieves this with smaller bins (~100 Hz wide) at lower frequencies and larger bins (~1000 Hz wide) at higher frequencies.</p><br>
 
-            <p> 1) Window the signal into 30 ms intervals with a 20 ms overlap, which means that there are 10 ms of new signal information for every window. Then a Hamming window was applied to prevent spectral leakage following Equation 7 ($N=30$, $n=[1,30]$): $$ \begin{equation} W(n) = 0.54 + 0.46*cos(\frac{2\pi n}{N-1}) \end{equation} $$ </p> <br>
-            <p> 2) Compute the Fast Fourier Transform (FFT) of the windowed signal </p> <br>
+            <p> 1) Window the signal into 30 ms intervals with a 20 ms overlap, which means that there are 10 ms of new signal information for every window. Then a Hamming window was applied to prevent spectral leakage following (7) ($N=30$, $n=[1,30]$): $$ \begin{equation} W(n) = 0.54 + 0.46*cos(\frac{2\pi n}{N-1}) \end{equation} $$ </p> <br>
+            <p> 2) Compute the Fast Fourier Transform (FFT) of the windowed signal: </p> <br>
             <p> 3) Compute the magnitude of the FFT coefficients: $$ \begin{equation} FFT_{mag} = |FFT|^2 \end{equation}$$ </p><br>
             <p> 4) Choose $f_{max} = 3000 Hz$, $f_{min} = 100 Hz$, and the number of Mel bins $Bins_{Mel} = 15$. Compute the Mel scale: $$\begin{equation} f_{max} Mels = 1125 * log(1 + \frac{f_{max} Hz}{700})\end{equation}$$ $$\begin{equation} f_{min} Mels = 1125 * log(1 + \frac{f_{min} Hz}{700})\end{equation}$$ </p><br>
             <p> 5) Using $f_{max}$ and $f_{min}$ in Mels, and the number of Mel bins create equispaced filters on the Mel scale. Next convert these Mel frequencies back to Hz to determine the location of the filters: $$\begin{equation} f_{filter} Hz = 700 * (e^{\frac{f_{filter} Mel}{1125}} - 1) \end{equation}$$ This creates a Mel filter bank similar to the image, "Sample Mel Filter Bank".</p><br>
             <p> 6) Compute the magnitude of $FFT_{mag}$ within each of the triangular Mel filter banks. </p><br>
             <p> 7) Compute the log of these magnitudes. Length of vector here should be equal to the number of Mel bins. </p><br>
-            <p> 8) Generate the MFCCs by computing the Inverse FFT of the log of magnitudes. In this case the IFFT reduces to the Discrete Cosine Transform (DCT). The result should be similar to the image "Sample MFCCs".</p><br>
+            <p> 8) Generate the MFCCs by computing the Inverse FFT of the log of magnitudes. In this case the IFFT reduces to the Discrete Cosine Transform (DCT). The result should be similar to the image "Sample MFCCs".
+            The effect of this is to make the coefficients purely real.</p><br>
 
             <div class="row">
                 <div class="col-3 col-lg-3">
@@ -241,11 +243,11 @@
             <a name="knn"></a>
             <br>
             <h4> Kth Nearest Neighbors </h4>
-            <p>In this section, the Kth Nearest Neighbors classification algorithm is discussed. This algorithm is very simple in complexity, however its lack of elegance is evident during implementation. It is a very brute force method of classification, and its results are not as good as those for the other classifier we developed. Additionally, it takes far longer to run. The exact runtimes are discussed in the Implementation subsection of the Mahalanobis Distance section.
+            <p>In this section, the $K^{th}$ Nearest Neighbors classification algorithm is discussed. This algorithm is very simple in complexity, however its lack of elegance is evident during implementation. It is a very brute force method of classification, and its results are not as good as those for the other classifier we developed. Additionally, it takes far longer to run. The exact runtimes are discussed in the Implementation subsection of the Mahalanobis Distance section.
             </p>
 
-            <p>The idea behind Kth Nearest Neighbors is to find, quite literally, the nearest k vectors in an N-dimensional space using the Euclidean metric. In this case, these N-dimensional vectors are MFCC vectors. In this application, MFCC databases of each speaker are generated. That is, given a speech segment with only one of the speakers talking, a matrix whose columns are MFCC vectors, each corresponding to a short time interval (discussed in MFCC section), is generated. Then, given an input speech vector with these two speakers talking at different times, MFCC vectors are generated. Given a single input MFCC vector, the Kth Nearest Neighbors algorithm compares this single MFCC vector with all of the vectors in both databases. Specifically, the Euclidean distance between the single input vector and every vector in both databases is calculated. Then, the database vectors with the k smallest distances are recorded. The speaker whose vectors comprise the majority of these k vectors is determined as who is speaking for the time interval from which this MFCC vector was generated. In our experiments with the Kth Nearest Neighbors algorithm we tested several different values of k. We found that, no matter the value of k, the Mahalanobis classifier was much faster and more accurate, although sometimes marginally so. Due to the lesser accuracy of Kth Nearest Neighbors and the much greater time cost, the final algorithm uses the Mahalanobis classifier.</p>
-            <p>Below is a diagram demonstrating the Kth Nearest Neighbors method for 3 different values of k. The red and green points represent 2-dimensional MFCC vectors for example red and green speaker databases. The blue vector is the input MFCC vector that is being compared. In this example, the blue point would be classified as the red speaker talking for all three values of k. The axes for this plot are simply contrived example MFCCs.</p>
+            <p>The idea behind $K^{th}$ Nearest Neighbors is to find, quite literally, the nearest $k$ vectors in an $N$-dimensional space using the Euclidean metric. In this case, these $N$-dimensional vectors are MFCC vectors. In this application, MFCC databases of each speaker are generated. That is, given a speech segment with only one of the speakers talking, a matrix whose columns are MFCC vectors, each corresponding to a short time interval (discussed in MFCC section), is generated. Then, given an input speech vector with these two speakers talking at different times, MFCC vectors are generated. Given a single input MFCC vector, the $K^{th}$ Nearest Neighbors algorithm compares this single MFCC vector with all of the vectors in both databases. Specifically, the Euclidean distance between the single input vector and every vector in both databases is calculated. Then, the database vectors with the $k$ smallest distances are recorded. The speaker whose vectors comprise the majority of these $k$ vectors is determined as who is speaking for the time interval from which this MFCC vector was generated. In our experiments with the $K^{th}$ Nearest Neighbors algorithm we tested several different values of $k$. We found that, no matter the value of $k$, the Mahalanobis classifier was much faster and more accurate, although sometimes marginally so. Due to the lesser accuracy of $K^{th}$ Nearest Neighbors and the much greater time cost, the final algorithm uses the Mahalanobis classifier.</p>
+            <p>Below is a diagram demonstrating the $K^{th}$ Nearest Neighbors method for 3 different values of $k$. The red and green points represent 2-dimensional MFCC vectors for example red and green speaker databases. The blue vector is the input MFCC vector that is being compared. In this example, the blue point would be classified as the red speaker talking for all three values of $k$. The axes for this plot are simply contrived example MFCCs.</p>
             <br>
            
                         <a href="pics/kthnearestexample.png">
@@ -287,7 +289,7 @@
         <br><br>
         <hr class="featurette-divider">
         <h2> Experimental Results </h2>
-        <p> Here we present the raw results of the $ K^{th} $ nearest neighbors classifier and Mahalanobis classifier, in terms of speaker classification per 10 ms or $ \frac{1}{100} $ second. It is clear that some type of post-processing is necessary to account for this noise. </p>
+        <p> Here we present the raw results of the $ K^{th} $ Nearest Neighbors classifier and Mahalanobis classifier, in terms of speaker classification per 10 ms or $ \frac{1}{100} $ second. It is clear that some type of post-processing is necessary to account for this noise. </p>
         <br>
         <div class="row">
             <div class="col-3 col-lg-3">
@@ -303,7 +305,7 @@
                     <a href="pics/raw_kth.png">
                         <img src="pics/raw_kth.png" alt="">
                     </a>
-                    <h4> Raw $K^{th}$ nearest neighbors output</h4>
+                    <h4> Raw $K^{th}$ Nearest Neighbors output</h4>
                 </div>
             </div>
         </div>
@@ -348,7 +350,8 @@
         <br>
         <h3> Error Correction </h3>
         <h4> 1) Remove Effect of Silence </h4>
-        <p> One of the major sources of error for our classifier is the presence of silence in recordings. Silence is common in human speech due to breaths and pauses. If the recording is silent then the classifier cannot determine who is speaking (because nobody is). Our method determined that silence was present if the signal amplitude was within 0.2 standard deviations of the signal mean. The samples determined as silent samples were then set to have value 0. The thresholded speech signal can be seen below. It is important to note that low amplitude signal doesn't necessarily indicate that there is silence in the speech signal because the signal oscillates around its mean. Thus, a method was required to determine the presence of a significant amount of consecutive low-amplitude samples. To accomplish this, a 10ms length moving average was applied to the thresholded speech signal. If this filter output was 0 for any point in time, then the surrounding points for 5 ms in each direction were also zero. Thus, it is reasonable to assume that the speech signal is low amplitude for a significant amount of time (10 ms) whenever the filter output is 0. The plot of the moving average filter output can be seen below. Finally, all MFCC vectors calculated during a silence occured were set to speaker 1.5. This is an arbitary marker: another moving average filter applied to the silence corrected speaker classification data simply doesn't count classifications of 1.5. This filter is discussed in section 2). </p><br>
+        <p> One of the major sources of error for our classifier is the presence of silence in recordings. Silence is common in human speech due to breaths and pauses. If the recording is silent then the classifier cannot determine who is speaking (because nobody is). Our method determined that silence was present if the signal amplitude was within 0.2 standard deviations of the signal mean. The samples determined as silent samples were then set to have value 0. The thresholded speech signal can be seen below. It is important to note that low amplitude signal doesn't necessarily indicate that there is silence in the speech signal because the signal oscillates around its mean. Thus, a method was required to determine the presence of a significant amount of consecutive low-amplitude samples. To accomplish this, a 10ms length moving average was applied to the thresholded speech signal. If this filter output was 0 for any point in time, then the surrounding points for 5 ms in each direction were also zero. Thus, it is reasonable to assume that the speech signal is low amplitude for a significant amount of time (10 ms) whenever the filter output is 0. The plot of the moving average filter output can be seen below. Finally, all MFCC vectors calculated during a silence occured were set to speaker 1.5. This is an arbitary marker: another moving average filter applied to the silence corrected speaker classification data simply doesn't count classifications of 1.5. This filter is discussed in below in section 2) Isolated 
+        Misclassifcations. </p><br>
         <div class="row">
             <div class="col-3 col-lg-3">
                 <div class="thumbnail">
@@ -386,7 +389,7 @@
 
         <br>
         <h4> 2) Isolated Misclassifications </h4>
-        <p> Even after accounting for silences and breaths, it is evident that the classifier output, displayed in the last plot above, still needs work. During the analysis of this data, we noticed that the density of correct classifications per unit time was far greater than the density of misclassifications per unit time. We call these isolated misclassifications, an example of which is a sequence of classifications $[ 2, 2, 2, 1, 2, 2] $ that we know should be $[ 2, 2, 2, 2, 2, 2]$. To resolve this issue, we took at 2.2 second width causal moving average of the surrounding classifications and removed the effect of silent portions (marked as speaker 1.5) when calculating the mean using the method described in 1). This filter had the effect of measuring the density of classification points, which was our goal. If the filter output was greater than 1.5, then the algorithm determined that speaker 2 was talking, and likewise if the filter was less than 1.5 for speaker 1. The filter output is plotted below, along with a constant line at 1.5.</p> 
+        <p> Even after accounting for silences and breaths, it is evident that the classifier output, displayed in the last plot above, still needs work. During the analysis of this data, we noticed that the density of correct classifications per unit time was far greater than the density of misclassifications per unit time. We call these isolated misclassifications, an example of which is a sequence of classifications $[ 2, 2, 2, 1, 2, 2] $ that we know should be $[ 2, 2, 2, 2, 2, 2]$. To resolve this issue, we took at 2.2 second long causal moving average of the surrounding classifications and removed the effect of silent portions (marked as speaker 1.5) when calculating the mean using the method described in 1) Remove Effect of Silence. This filter had the effect of measuring the density of classification points, which was our goal. If the filter output was greater than 1.5, then the algorithm determined that speaker 2 was talking, and likewise if the filter was less than 1.5 for speaker 1. The filter output is plotted below, along with a constant line at 1.5.</p> 
 
         <p>Another interesting property of the filter was a local max/min when the classifier predicted that a new speaker begins talking. Of course, a 2.2 second moving average requires more than 1.1 seconds of speaker classifications of the correct speaker to exist within the average. Thus, the resolution of this filter is 1.1 seconds, and a 1.1 second delay on speaker classification will occur when the algorithm estimates a change in speaker. </p><br>
         <div class="row">
@@ -400,6 +403,7 @@
             </div>
         </div>
 
+        <h3> Final Results (after Error Correction) </h3>
         <p> Below are confusion matrices for each permutation of classifier and features used for the classifier data after these proposed corrections were made. </p>
         <div class="row">
             <div class="col-3 col-lg-3">
@@ -436,11 +440,11 @@
             </div>
         </div>
 
-        <p> As with before the corrections, the Mahalanobis classifier using only MFCCs has the highest rate of accuracy; however, its accuracy has increased from 61.3% to an astounding 94.8%. As mentioned in the Technical Work section, the Mahalanobis classifier was also much faster than the Kth Nearest Neighbor classifier. These results show that the Mahalanobis classifier is clearly the best choice of classifier given the approach we took to accomplish our goal. The reason the Mahalanobis classifier isn't 100% accurate is mostly due to the 1.1 second resolution of the moving average filter. The algorithm has approximately 1.1 seconds of lag before it determines a new speaker is talking, as discussed in 2). Additional errors come from the fact that the MFCCs are likely not perfectly described by an N-variate Gaussian distribution as the Mahalanobis Distance assumes. Due to this, high densities of misclassifications that were not corrected by the methods proposed in 1) and 2) still may remain in the data simply due to incorrect assumptions made by the Mahalanobis classifier. These errors by misassumption comprise a very small portion of the errors.</p>
-        <p>The plot below shows a comparison of the correct speaker classification (red x) vs time and the algorithm estimate for the speaker classification (blue o) vs time. Clearly, most of the discrepancies occur when the speakers change. There is a period where the algorithm estimate lags behind the correct classification due to the 1.1 second lag from the moving average as discribed before. Additionally, sparesly distributed misclassifications are also observed. This is likely due to errors by misassumption, also described previously.</p>
+        <p> As with before the corrections, the Mahalanobis classifier using only MFCCs has the highest rate of accuracy; however, its accuracy has increased from 61.3% to an astounding 94.8%. As mentioned in the Technical Work section, the Mahalanobis classifier was also much faster than the %K^{th}$ Nearest Neighbor classifier. These results show that the Mahalanobis classifier is clearly the best choice of classifier given our approach. The reason the Mahalanobis classifier isn't 100% accurate is mostly due to the 1.1 second resolution of the moving average filter. The algorithm has approximately 1.1 seconds of lag before it determines a new speaker is talking, as discussed in 2). Additional errors come from the fact that the MFCCs are likely not perfectly described by an N-variate Gaussian distribution as the Mahalanobis Distance assumes. Due to this, high densities of misclassifications that were not corrected by the methods proposed in 1) and 2) still may remain in the data simply due to incorrect assumptions made by the Mahalanobis classifier. These errors by misassumption comprise a very small portion of the errors.</p>
+        <p>The plot below shows a comparison of the correct speaker classification (red x) vs time and the algorithm estimate for the speaker classification (blue o) vs time. Clearly, most of the discrepancies occur when the speakers change. There is a period where the algorithm estimate lags behind the correct classification due to the 1.1 second lag from the moving average as discribed before. Additionally, sparsely distributed misclassifications are also observed. This is likely due to errors by misassumption, also described previously.</p>
          <p>To correct the time lag error, efforts to account for this lag could be taken. An example of such a method is accomplished by determining points in time where the speaker changes, and then retroactively correcting the preceding 1.1 seconds of datapoints. Of course, this would take testing and time to implement because the point at which the speakers change is not set in stone due to the errors by misassumption. Given the time left to complete the project, we have omitted such a correction as the current 1.1 second resolution results are good enough for a practical speaker diarizer.</p>
         <a href="pics/SpeakerandCorrect.png">
-                            <img src="pics/SpeakerandCorrect.png" alt="">
+            <img src="pics/SpeakerandCorrect.png" alt="">
         </a>
         <!-- Conclusions  -->
         <div class="container">
@@ -451,8 +455,29 @@
             <h2> Conclusions </h2>
             <p>In conclusion, the Mahalanobis classifier using only MFCCs for features proved to be the most effective speech diarizer, both in accuracy and computation time. The Mahalanobis classifier was approximately 1900 times faster than the Kth Nearest Neighbor classifier, and at a minimum it was 3.4% more accurate. The final algorithm yielded accuracies around 95%, with most of its errors coming from the time delay due to the 2.2 second moving average filter.</p>
             <p>After our presentation, attempts to create a 3 person classifier were made; however, these attempts were unsuccesful as implementing a third speaker would require a completely different classification scheme. It is possible that the Mahalanobis distance could still be utilized, but assigning speakers to 1, 2, and 3 using moving averages clearly wouldn't work. Due to the limited time to implement such a large task, we decided to cease development of the 3 person classifier and focus our efforts elsewhere.</p>
-            <p>The main goal of the project was accomplished with a high degree of accuracy. Additional goals, such as implementing features other than MFCCs, were also accomplished via the implementation of envelopes. Although it yielded lesser results than just MFCCs, this implementation was completed. It is possible that the results with envelopes were worse due to the fact that envelopes don't follow a multivariate Gaussian as the MFCCs seem to. Another goal was the development of a simple diarizer using the classification output. This goal was accomplished, and it effectively separates the multiple-speaker input .wav file into separate files, each containing only one speaker talking.</p>
+            <p>The main goal of the project was accomplished with a high degree of accuracy. Additional goals, such as implementing features other than MFCCs, were also accomplished via the implementation of envelopes. Although it yielded lesser results than just MFCCs, this implementation was completed. It is possible that the results with envelopes were worse due to the fact that envelopes don't follow a multivariate Gaussian as the MFCCs seem to. Another goal was the development of a simple diarizer using the classification output. This goal was accomplished, and it effectively separates the multiple-speaker input .wav file into separate files, each containing only one speaker talking as seen in the Demonstration section below.</p>
 
+        </div>
+
+        <!-- Demo  -->
+        <div class="container">
+            <a name="demo"></a>
+            <div class="clearfix"></div>
+            <br><br>
+            <hr class="featurette-divider">
+            <h2> Demonstration </h2>
+            <p> In order to run our demonstration first clone this 
+            <a href="https://github.com/srohrer32/eecs351project"> repo </a>. Next navigate to the 
+            repository in MATLAB and run <b>driver</b>. This diarizes a sample into two distinct 
+            files using MFCCs and Mahalanobis distance. The resulting plot should look like this:</p>
+            <a href="pics/demo.png">
+               <img src="pics/demo.png" alt="">
+            </a>
+            <p> And the resulting sounds files should be:</p>
+            <h4> Speaker 1 Only </h4>
+            <audio src="sound/speaker1.wav" preload="auto" controls></audio>
+            <h4> Speaker 2 Only </h4>
+            <audio src="sound/speaker2.wav" preload="auto" controls></audio>
         </div>
 
         <!-- References  -->
