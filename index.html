@@ -93,8 +93,11 @@
         <br><br>
         <hr class="featurette-divider">
         <h2> Introduction </h2>
-        <p> Given a recording with multiple people speaking at different times (ex. meeting) identify who is speaking in each second. Then we aim to take this information and separate the signal into individual signals for each speaker, or diarize the signal. A prerequisite to this is a past database of samples of all the speakers. </p> <br>
-        <p> We aim to do this using Mel Frequency Cepstrum Coefficients (MFCCs), which were originally developed in... </p>
+        <p>We are Sam Rohrer and Bob Malinas. This website is dedicated to presenting our final EECS 351 project at the University of Michigan. Sam is a computer engineering major, and Bob an electrical engineering major.</p>
+        <p> The goal of our project is to take a sample of human speech and determine who is speaking as a function of time. This is known as speaker diarization. Applications for speaker diarization include separating a recording of a business meeting into segments, where each segment is a specific person giving their portion of the meeting. This is to make the lives of people who have to listen to these meetings easier.  </p>
+        <p> We aim to do this using Mel Frequency Cepstrum Coefficients (MFCCs), which are abstract feature vectors that are calculated using digital methods that mimic the inherent audio filtering of the human ear. Just as humans can determine who is speaking given a speech recording, the belief is that a digital process will be able to do the same. </p>
+        <p> To accomplish our goal, we tested a variety of different speech features and classification methods. The method that produced the most accurate results was a classifier that used Mahalanobis distance and MFCCs. The specifics of these can be found in the section labeled Technical Work. An extensive overview of the output of each combination of features and classification methods can be viewed in the Experimental Results section.</p>
+        <p> The results of our Mahalanobis classifier are very favorable, yielding highly accurate speaker classification within a resolution of one second. This means that, in any given second, the algorithm could be predicting an incorrect speaker; however, it will be correct in the next second. For long speech inputs, one second resolution is realistically good enough. Additionally, the algorithm can even work with segments of speech that have a significant amount of breaths in them. Breaths proved impossible to classify, so handling them involved some error correction. The specific methods of error correction are discussed in the Experimental Results section.</p>
     </div>
 
     <!-- Data  -->
